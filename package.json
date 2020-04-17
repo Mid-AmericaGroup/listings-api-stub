@@ -1,0 +1,15 @@
+{
+  "name": "fake-listing-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "proprietary",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "chance": "^1.1.4",
+    "express": "^4.17.1",
+    "formidable": "^1.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
