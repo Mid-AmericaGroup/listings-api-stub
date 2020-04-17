@@ -1,0 +1,341 @@
+swagger: "2.0"
+info:
+  description: "This is an API allowing users to find and update listing marketing details"
+  version: "1.0.0"
+  title: "Coldwell Banker Mid-America Group Listing Api"
+  contact:
+    email: "paul.clowser@cbdsm.com"
+host: "home.cbdsm.com"
+basePath: "/api"
+tags:
+- name: "listings"
+  description: "Everything about getting and managing listings"
+- name: "listing photos"
+  description: "Documentation around managing listing photos for a given listing"
+schemes:
+- "https"
+paths:
+  /v1/listings:
+    get:
+      deprecated: true
+      tags:
+      - "listings"
+      summary: "Get a listing by mls number"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "mls_number"
+        description: "MLS Number of the listing to find"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successful operation. Output can be either the json object or `null`"
+          schema:
+            $ref: "#/definitions/NullableListingByMlsNumber"
+  /v1/listings/{listing_id}:
+    get:
+      deprecated: true
+      tags:
+      - "listings"
+      summary: "Get a listing by mls number"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "listing_id"
+        description: "ID of the listing to find"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListingById"
+        404:
+          description: "Listing not found"
+    put:
+      deprecated: true
+      tags:
+        - "listings"
+      summary: "Update the virtual tour or youtube url for a listing"
+      parameters:
+      - in: "path"
+        name: "listing_id"
+        description: "ID of the listing to find"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "Listing Data"
+        description: "Listing marketing data to update"
+        schema:
+          $ref: "#/definitions/MarketingVideoUrlPayload"
+      responses:
+        204:
+          description: "successful operation"
+        422:
+          description: "unprocessable changes requested"
+        404:
+          description: "Listing not found"
+  /v1/listings/{listing_id}/listing_photos:
+    get:
+      deprecated: true
+      tags:
+      - "listing photos"
+      summary: "Get listing photos for a listing"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "listing_id"
+        description: "ID of the listing"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListingPhotos"
+        404:
+          description: "Listing not found"
+    post:
+      deprecated: true
+      tags:
+      - "listing photos"
+      summary: "Create a listing photo for a given listing"
+      consumes:
+         - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "listing_id"
+        description: "ID of the listing"
+        required: true
+        type: "integer"
+      - in: "formData"
+        required: true
+        name: "photo"
+        type: "file"
+        description: "The file to upload."
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListingPhoto"
+        422:
+          description: "Unprocessable Entity: Listing not found"
+  /v2/listings:
+    get:
+      tags:
+      - "listings"
+      summary: "Get a listing by mls number"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "mls_number"
+        description: "MLS Number of the listing to find"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListingByMlsNumber"
+        404:
+          description: "Listing not found"
+  /v2/listings/{listing_id}:
+    get:
+      tags:
+      - "listings"
+      summary: "Get a listing by mls number"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "listing_id"
+        description: "ID of the listing to find"
+        required: true
+        type: integer
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListingById"
+        404:
+          description: "Listing not found"
+    put:
+      tags:
+        - "listings"
+      summary: "Update the virtual tour or youtube url for a listing"
+      parameters:
+      - in: "path"
+        name: "listing_id"
+        description: "ID of the listing to find"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "body"
+        description: "Listing marketing data to update"
+        required: true
+        schema:
+          $ref: "#/definitions/MarketingVideoUrlPayload"
+      responses:
+        204:
+          description: "successful operation"
+        422:
+          description: "unprocessable changes requested"
+        404:
+          description: "Listing not found"
+  /v2/listings/{listing_id}/listing_photos:
+    get:
+      tags:
+      - "listing photos"
+      summary: "Get listing photos for a listing"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "listing_id"
+        description: "ID of the listing"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListingPhotos"
+        404:
+          description: "Listing not found"
+    post:
+      tags:
+      - "listing photos"
+      summary: "Create a listing photo for a given listing"
+      consumes:
+         - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "listing_id"
+        description: "ID of the listing"
+        required: true
+        type: "integer"
+      - in: "formData"
+        required: true
+        name: "photo"
+        type: "file"
+        description: "The image to upload."
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListingPhoto"
+        422:
+          description: "Unprocessable Entity: Listing not found"
+        500:
+          description: "Unable to save the listing photo"
+  /v2/listing_photos/{photo_id}:
+    put:
+      tags:
+        - "listing photos"
+      summary: "Create a listing photo for a given listing"
+      consumes:
+         - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "photo_id"
+        description: "ID of the photo to replace"
+        required: true
+        type: "integer"
+      - in: "formData"
+        required: true
+        name: "photo"
+        type: "file"
+        description: "The image to upload."
+      responses:
+        204:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListingPhoto"
+        404:
+          description: "Listing photo not found"
+
+securityDefinitions:
+  ApiKeyAuth:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+security:
+  - ApiKeyAuth: []
+definitions:
+  NullableListingByMlsNumber:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: 98765
+      mls_number:
+        type: "string"
+        example: "123456"
+  ListingByMlsNumber:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: 98765
+      mls_number:
+        type: "string"
+        example: "123456"
+  ListingById:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: 98765
+      mls_number:
+        type: "string"
+        example: "123456"
+      virtual_tour_url:
+        type: "string"
+        format: "url"
+        example: "https://example.com/virtual-tour-url"
+      youtube_url:
+        type: "string"
+        format: "uri"
+        example: "https://youtube.com/virtual-tour-url"
+  MarketingVideoUrlPayload:
+    type: "object"
+    properties:
+      virtual_tour_url:
+        type: "string"
+        format: "url"
+        example: "https://example.com/virtual-tour-url"
+        maxLength: 255
+      youtube_url:
+        type: "string"
+        format: "uri"
+        maxLength: 255
+        example: "https://youtube.com/virtual-tour-url"
+  ListingPhotos:
+    type: "array"
+    items:
+      $ref: "#/definitions/ListingPhoto"
+  ListingPhoto:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: 98765
+      position:
+        type: "integer"
+        format: "int64"
+        example: 1
