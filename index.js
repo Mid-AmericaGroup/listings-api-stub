@@ -18,7 +18,22 @@ const getListingByMlsNumber = (mlsNumber) => listings.find((currentListing) => c
 
 // BEGIN LISTING ENDPOINTS
 app.get('/api/v1/listings', (request, response) => {
-    console.log({listings});
+    const { mls_number } = request.query;
+
+    const listing = getListingByMlsNumber(mls_number);
+
+    if (!listing) {
+        response.sendStatus(404);
+        return;
+    }
+
+    response.json({
+        id: listing.id,
+        mls_number
+    });
+});
+
+app.get('/api/v2/listings', (request, response) => {
     const { mls_number } = request.query;
 
     const listing = getListingByMlsNumber(mls_number);
