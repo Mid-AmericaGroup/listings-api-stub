@@ -5,7 +5,7 @@ info:
   title: "Coldwell Banker Mid-America Group Listing Api"
   contact:
     email: "paul.clowser@cbdsm.com"
-host: "home.cbdsm.com"
+host: "home.coldwellbankermag.com"
 basePath: "/api"
 tags:
 - name: "listings"
@@ -14,6 +14,8 @@ tags:
   description: "Documentation around managing listing photos for a given listing"
 schemes:
 - "https"
+consumes:
+  - application/json
 paths:
   /v1/listings:
     get:
